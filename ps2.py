@@ -40,11 +40,12 @@ def hough_lines_acc(img_edges, rho_res=1, theta_res=pi/90):
     H = np.zeros((rho.size, theta.size), dtype=np.uint8)
     for y in range(height):
         for x in range(width):
-            for index,_theta in enumerate(theta):
-                _rho = x*np.cos(_theta) + y*np.sin(_theta)
-                rho_index = np.where(rho == int(_rho))
-                if rho_index[0]:
-                    H[rho_index[0][0],index] += 1
+            if img_edges[x,y] > 0:
+                for index,_theta in enumerate(theta):
+                    _rho = x*np.cos(_theta) + y*np.sin(_theta)
+                    rho_index = np.where(rho == int(_rho))
+                    if rho_index[0]:
+                        H[rho_index[0][0],index] += 1
 
 
     return H, rho, theta
@@ -89,7 +90,6 @@ def main():
     # TODO: Compute edge image (img_edges)
     img_edges = cv2.Canny(img,100,200)
     cv2.imwrite(os.path.join(output_dir, 'ps2-1-a-1.png'), img_edges)  # save as ps2-1-a-1.png
-    show_image(img_edges)
 
     # 2-a
     # Compute Hough Transform for lines on edge image
@@ -97,7 +97,8 @@ def main():
 
     # TODO: Store accumulator array (H) as ps2-2-a-1.png
     # Note: Write a normalized uint8 version, mapping min value to 0 and max to 255
-    show_image(H)
+    print np.matrix(H).max()
+    cv2.imwrite(os.path.join(output_dir, 'ps2-2-a-1.png'), H + (255-np.matrix(H).max()))
 
     # 2-b
     # Find peaks (local maxima) in accumulator array
