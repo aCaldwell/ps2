@@ -64,6 +64,7 @@ def hough_peaks(H, Q):
         peaks: Px2 matrix (P <= Q) where each row is a (rho_idx, theta_idx) pair
     """
     # TODO: Your code here
+
     return peaks
 
 
@@ -93,12 +94,11 @@ def main():
 
     # 2-a
     # Compute Hough Transform for lines on edge image
-    H, rho, theta = hough_lines_acc(img_edges)  # TODO: implement this, try calling with different parameters
+    H, rho, theta = hough_lines_acc(img_edges, 1, pi/270)  # TODO: implement this, try calling with different parameters
 
     # TODO: Store accumulator array (H) as ps2-2-a-1.png
     # Note: Write a normalized uint8 version, mapping min value to 0 and max to 255
-    print np.matrix(H).max()
-    cv2.imwrite(os.path.join(output_dir, 'ps2-2-a-1.png'), H + (255-np.matrix(H).max()))
+    cv2.imwrite(os.path.join(output_dir, 'ps2-2-a-1.png'), H)
 
     # 2-b
     # Find peaks (local maxima) in accumulator array
