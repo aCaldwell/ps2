@@ -175,12 +175,13 @@ def hough_circles_acc(img_edges, radi_range):
     H = np.zeros((height, width, len(possible_radii)), dtype=np.uint8)
     for y in range(height):
         for x in range(width):
-            for r_index,radius in enumerate(possible_radii):
-                for theta in gradients:
-                    a = x-radius*np.cos(theta)
-                    b = y-radius*np.sin(theta)
-                    if a < height and b < width:
-                        H[a,b,r_index] += 1
+            if img_edges[y,x] > 0:
+                for r_index,radius in enumerate(possible_radii):
+                    for theta in gradients:
+                        a = x-radius*np.cos(theta)
+                        b = y-radius*np.sin(theta)
+                        if a < height and b < width:
+                            H[a,b,r_index] += 1
 
     return H
 def main():
@@ -256,14 +257,14 @@ def main():
     img_out = cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)
     hough_lines_draw(img_out, peaks, rho, theta)
     cv2.imwrite(os.path.join(output_dir, 'ps2-4-c-1.png'), H_out)
+    cv2.imwrite(os.path.join(output_dir, 'ps2-4-c-2.png'), img_out)
     #show_image(img_out)
 
     # 5
     # TODO: Implement Hough Transform for circles
     H = hough_circles_acc(img_edges, 20)
     print H
-    print H[:2]
-    H_out = cv2.cvtColor(H[:2], cv2.COLOR_GRAY2BGR)
+    H_out = cv2.cvtColor(H, cv2.COLOR_GRAY2BGR)
     show_image(H_out)
     
 
